@@ -1,0 +1,46 @@
+Imagine a server with the following specs:
+● 4 times Intel(R) Xeon(R) CPU E7-4830 v4 @ 2.00GHz
+● 64GB of ram
+● 2 tb HDD disk space
+● 2 x 10Gbit/s nics
+The server is used for SSL offloading and proxies around 25000 requests per second.
+Please let us know which metrics are interesting to monitor in that specific case and
+how would you do that? What are the challenges of monitoring this?
+
+
+Solution:
+ With considering operation system, we can use the monitoring service as(PRTG,Zabix,Solarwinds,...) and connect it to the server with any protocol that it can support such as snmp, wmi or with installing monitoring agent in SSL offloading server, and then add below features in the monitoring server:
+1- Monitor CPU as
+        -CPU IO wait.
+        -CPU usage total.
+        -CPU usage per process.
+2- Monitor Memory as:
+        -Memory total usage.
+        -Memory usage per process.
+3- Monitor network interfaces as :
+        -interfaces status.
+        -traffic output and input(packet counts and bandwidth)
+        -Compare input bandwidth of incoming/outgoing interface with output bandwidth of outgoing/incoming interface. It can show the lost requests/connections in the main functionality ==> Generate them in the Monitoring server side, not in the SSL offloading server.
+4- Monitoring proxy and ssl offloading services/processes
+5- Monitoring request and connection counts. ==> The SSL offloading application must send such values to the monitoring system.
+6- Monitoring ssl offloading and proxy ports.(if the services are working in Active Mode and not passive)
+7- Monitoring management ports
+8- Monitoring disks as
+        -Capacity
+        -Write/Read delay
+        -Write/Read throughput
+9-Monitoring of server health status
+
+
+
+Challenges:
+
+1-Monitoring resource usage on the server could harm the main functionality of the server within below scopes
+        -Bandwidth
+        -CPU
+        -Memory
+
+2-Because of the high load of the server, we may have data lost in monitoring. It means some cycles of monitoring data won't transfer to the monitoring server and it can cause unbeneficial reports.
+
+
+
